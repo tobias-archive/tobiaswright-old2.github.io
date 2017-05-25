@@ -3,14 +3,21 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Mostly correct</title>
+  <title>Getting around CORS with Azure Functions | Mostly correct</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Mostly correct">
-<meta property="og:url" content="http://tobiaswright.com/blog/index.html">
+  <meta name="description" content="Cross Origin Resource (CORS) sharing is a security issue on most browsers that prevent making client side request via http from two different domain. Great for security, sucks for making ajax request.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Getting around CORS with Azure Functions">
+<meta property="og:url" content="http://tobiaswright.com/blog/Getting-around-CORS-with-Azure-Functions/index.html">
 <meta property="og:site_name" content="Mostly correct">
+<meta property="og:description" content="Cross Origin Resource (CORS) sharing is a security issue on most browsers that prevent making client side request via http from two different domain. Great for security, sucks for making ajax request.">
+<meta property="og:image" content="http://tobiaswright.com/blog/images/createFunc.png">
+<meta property="og:image" content="http://tobiaswright.com/blog/images/postman.png">
+<meta property="og:updated_time" content="2017-05-25T20:35:23.595Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Mostly correct">
+<meta name="twitter:title" content="Getting around CORS with Azure Functions">
+<meta name="twitter:description" content="Cross Origin Resource (CORS) sharing is a security issue on most browsers that prevent making client side request via http from two different domain. Great for security, sucks for making ajax request.">
+<meta name="twitter:image" content="http://tobiaswright.com/blog/images/createFunc.png">
   
     <link rel="alternate" href="/atom.xml" title="Mostly correct" type="application/atom+xml">
   
@@ -59,9 +66,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-Getting-around-CORS-with-Azure-Functions" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-Getting-around-CORS-with-Azure-Functions" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog/Getting-around-CORS-with-Azure-Functions/" class="article-date">
   <time datetime="2017-05-25T15:30:10.000Z" itemprop="datePublished">2017-05-25</time>
@@ -74,8 +79,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog/Getting-around-CORS-with-Azure-Functions/">Getting around CORS with Azure Functions</a>
+    <h1 class="article-title" itemprop="name">
+      Getting around CORS with Azure Functions
     </h1>
   
 
@@ -107,56 +112,19 @@
     </footer>
   </div>
   
-</article>
-
-
+    
+<nav id="article-nav">
   
-    <article id="post-Accessing-process-env-variables-in-Azure-Functions" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog/Accessing-process-env-variables-in-Azure-Functions/" class="article-date">
-  <time datetime="2017-05-16T04:01:24.000Z" itemprop="datePublished">2017-05-16</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog/Accessing-process-env-variables-in-Azure-Functions/">Accessing process.env variables in Azure Functions</a>
-    </h1>
+    <a href="/blog/Accessing-process-env-variables-in-Azure-Functions/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Accessing process.env variables in Azure Functions</div>
+    </a>
   
+</nav>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Just thought I’d document this real quick, since it’s not super clear in the documentation, at least for developing Azure Function locally. On the server it’s clearer, but I’ll cover that too. It took me a couple of days to find the answer - and in all truth, I kind of stumbled on to the it.</p>
-<p><a href="https://docs.microsoft.com/en-us/azure/azure-functions/functions-reference-node" target="_blank" rel="external">In this article</a> they tell you you can access variables at runtime, and my assumption was I could add the value pair to local.settings.json (It use to be called appsettings.json). I do just that and…nothing - variable does not exist.</p>
-<p>local.settings.json:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  &quot;IsEncrypted&quot;: false,</div><div class="line">  &quot;Values&quot;: &#123;</div><div class="line">    &quot;secretKey&quot;: &quot;mycoolsecretkey&quot;,</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>index.js<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">context.log(process.env[&quot;secretKey&quot;])</div><div class="line">//returns undefined</div></pre></td></tr></table></figure></p>
-<p>What you have to do is add this object to the configuration array in luanch.json<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    &quot;type&quot;: &quot;node&quot;,</div><div class="line">    &quot;request&quot;: &quot;attach&quot;,</div><div class="line">    &quot;name&quot;: &quot;Attach to Process&quot;,</div><div class="line">    &quot;processId&quot;: &quot;$&#123;command:PickProcess&#125;&quot;,</div><div class="line">    &quot;port&quot;: 5858</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>And viola it works. Locally, in Visual Studio Code, when you open up luanch.json if gives you a bunch of other basic config options to create at runtime, so if a thing is not working and you think is should be try checking that out. I kind of stumbled on this file while trying to debug this issue.</p>
-<p>In the protal add the varibles to Platform features &gt; Applications settings</p>
-<p><img src="/blog/images/appsettings.PNG" alt="screeshot"></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://tobiaswright.com/blog/Accessing-process-env-variables-in-Azure-Functions/" data-id="cj34ks3220001pgt3g2t1hzd4" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Functions-Azure/">Functions, Azure</a></li></ul>
-
-    </footer>
-  </div>
   
 </article>
-
-
-  
 
 </section>
         
